@@ -45,7 +45,11 @@ int fetch_instruction() {
 }
 
 int decode_instruction(int itr) {
-	int op = (itr & 0xF8000000) >> 27;
+	int decode[5];
+	decode[0] = (itr & 0xF8000000) >> 27;	//OPCODE
+	decode[1] = (itr & 0x7000000) >> 24;	//PARAMETRO 0
+	decode[2] = (itr & 0x7000000) >> 24;	//PARAMETRO 1
+	decode[3] = (itr & 0x7000000) >> 24;	//PARAMETRO 3 
 	printf("op-%x-%d\n", op, op);
 	return op;
 }
@@ -53,7 +57,7 @@ int decode_instruction(int itr) {
 int main() {
 	int itr = 0;
 	int dc = 0;
-	//write_empty_memory();
+	write_empty_memory();
 	read_memory();
 	itr = fetch_instruction();
 	dc = decode_instruction(itr);
