@@ -4,30 +4,30 @@
 
 void print() {
 	printf("\033[1;32m");
-    printf("user@SISOP");
+	printf("user@SISOP");
 	printf("\033[0m");
 	printf(":");
 	printf("\033[1;34m");
 	printf("~");
 	printf("\033[0m");
-	printf(" $");	
+	printf("$ ");	
 }
 
 void main(int argc, char* argv[], char* envp[]) {
 
-	char nome[20] ;
-	int i, j, pid, k;
+	char cmd[20] ;
+	int j, pid;
 	int run = 1;
 
 	while(run) {
 		print();
-    	scanf ("%s", nome);
-    	pid = fork();
+    		scanf ("%s", cmd);
+    		pid = fork();
     	if(pid != 0) {
        		sleep(1) ;
        		pid = wait(0) ;   
- 		} else {
-       		j = execve (nome, argv, NULL);
+ 	} else {
+       		j = execve (cmd, argv, NULL);
        }
     }  
 }

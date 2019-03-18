@@ -28,7 +28,7 @@ void read_program(char* pFile) {
 	FILE *file;
 	file = fopen (pFile,"r");
 
-	int run = 5;
+	int run = 10;
 	char line[6];
 	printf("%s", pFile);
 	printf("READING PROGRAM!\n");
@@ -38,8 +38,8 @@ void read_program(char* pFile) {
 
 		if('$' == line[0]) {
 
-		} else if(';' == line[strlen(line)-1]) {
-			
+		} else if('\0' == line[strlen(line)]) {
+			printf("feitoria\n");	
 		} else {
 			
 		}
