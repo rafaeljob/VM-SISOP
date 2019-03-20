@@ -1,26 +1,37 @@
-	.data
-array:	.word 5 8 4 9 3 5
-size:	.word 6
-	.text main
+.data
+0x00000005	//size
+0x00000004	//vetor
+0x00000008
+0x00000009
+0x0000000A
+0x00000006
 
-main:	
-	add 	$1, $0
-while:	ldi 	$2, 0		#aux do while
-
-	ldi 	$0, array	#ad do array		
-for:	ldx	$4, $0		#$4 = array[ad]
-	add	$5, $0		#ad de array
-	addi	$5, 1		#$5 = ad+1
-	ldx	$5, $5		#$5 = array[ad+1]
-	ldi	$6, 0
-	add	$6, $4		#salva array[ad]
-	sub	$6, $5		#$6 = $6 - $5
-	ldi	$7, swap	#$7 = ad swap
-	jmpig	$7, $6		#se $6 > 0 pula p/ swap($7)
-
-
-end_for:
-
-end_while:
-
-swap:	
+.text
+0x60000021
+0x61000001
+0x20200000	//while
+0x61000000
+0x6A000000
+0x4A000002
+0x63000000
+0x43000001	//for
+0xA4600000
+0x65000000
+0x85600000
+0x45000001
+0xA6A00000
+0x87C00000
+0x97800000
+0x6000001D
+0x18E00000
+0x4A000001	//algo
+0x6000001B
+0x18400000
+0x0000000E
+0x60000021
+0x00000008
+0xABC00000	//troca
+0xAD800000
+0x61000001
+0x00000017
+0xF8000000	//fim_while	

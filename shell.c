@@ -28,7 +28,7 @@ void main(int argc, char* argv[], char* envp[]) {
        		pid = wait(0) ;   
  	} else {
        		j = execve (cmd, argv, NULL);
-       }
+       	}
     }  
 }
 

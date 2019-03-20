@@ -6,16 +6,17 @@
 //declaracao variaveis globais
 int memory_array[MEMORY_SIZE];
 int REGS[NUM_REGISTER];
-int PC = 0;
+int PC = 6;
 int run = 1;
+int decode[5];
 
 //declarcao das funcoes
 void write_empty_memory();
 void read_memory();
 int fetch();
 int* decode_instruction(int itr);
-void exec(int* wire);
-
+void exec(/*int* wire*/);
+void write_memory();
 
 void write_empty_memory() {
 
@@ -26,6 +27,20 @@ void write_empty_memory() {
 	printf("WRITING EMPTY MEMORY FILE!\n");
    	for(i=0;i<MEMORY_SIZE;i++) {
 		fprintf(file,"0x00000000\n");
+	}
+  
+   	fclose(file);
+}
+
+void write_memory() {
+
+	FILE *file;
+   	int i;
+   	file = fopen ("memory.txt","w");
+ 	
+	printf("WRITING MEMORY FILE!\n");
+   	for(i=0;i<MEMORY_SIZE;i++) {
+		fprintf(file,"%x\n", memory_array[i]);
 	}
   
    	fclose(file);
@@ -50,8 +65,8 @@ int fetch() {
 	return memory_array[PC++];
 }
 
-int* decoder(int itr) {
-	int decode[5];
+void decoder(int itr) {
+	//int decode[5];
 	decode[0] = (itr & 0xF8000000) >> 27;	//OPCODE
 	decode[1] = (itr & 0x07000000) >> 24;	//PARAMETRO 0
 	decode[2] = (itr & 0x00E00000) >> 21;	//PARAMETRO 1
@@ -62,10 +77,11 @@ int* decoder(int itr) {
 	printf("PR_2-%x-%d\n", decode[2], decode[2]);
 	printf("PR_3-%x-%d\n", decode[3], decode[3]);
 	printf("IMM-%x-%d\n", decode[4], decode[4]);
-	return decode;
+	//return decode;
 }
 
-void exec(int* wire) {
+void exec(/*int* wire*/) {
+	int* wire = &decode;
 	printf("itr=%x\n", wire[0]);
 	switch(wire[0]) {
 		//STOP
@@ -103,11 +119,13 @@ void exec(int* wire) {
 			break;
 		//STX
 		case 0x15:
-			memory_array[wire[1]] = REGS[wire[2]];	//[rd] = rs
+			
+			memory_array[REGS[wire[1]]] = REGS[wire[2]];	//[rd] = rs
+			printf("MEM-mod: %x\n", memory_array[REGS[wire[1]]]);
 			break;
 		//LDX
 		case 0x14:
-			REGS[wire[1]] = memory_array[wire[2]];	//rd = [rs]
+			REGS[wire[1]] = memory_array[REGS[wire[2]]];	//rd = [rs]
 			break;
 		//OR
 		case 0x13:
@@ -123,7 +141,7 @@ void exec(int* wire) {
 			break;
 		//SUB
 		case 0x11:
-			REGS[wire[1]] = REGS[wire[1]] - REGS[wire[2]];	//rd = rd + rs
+			REGS[wire[1]] = REGS[wire[1]] - REGS[wire[2]];	//rd = rd - rs
 			break;
 		//ADD
 		case 0x10:
@@ -193,7 +211,7 @@ void exec(int* wire) {
 int main() {
 	int itr = 0;
 	int* dc;
-	int i;
+	int i = 0;
 
 	//write_empty_memory();
 	read_memory();
@@ -202,13 +220,13 @@ int main() {
 		printf("PC:%d\n", PC);
 		itr = fetch();
 		printf("fetched instruction: %x\n", itr);
-		dc = decoder(itr);
-		for(i=0;i<5;i++) {
-			printf("%d-%d-%d-%d-%d\n", dc[0], dc[1], dc[2], dc[3], dc[4]);
-		}
-		printf("decoded instruction: %d\n", dc);
-		exec(dc);
+		decoder(itr);
+		exec();
 		printf("REGS:\n0:%x\n1:%x\n2:%x\n3:%x\n4:%x\n5:%x\n6:%x\n7:%x\n", REGS[0], REGS[1], REGS[2], REGS[3], REGS[4], REGS[5], REGS[6], REGS[7]);
+		printf("-----------%d\n",i);
+		i++;
+		if(i == 100) { break;}
 	}
+	write_memory();
 	return 0;
 }
