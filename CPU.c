@@ -6,7 +6,7 @@
 //declaracao variaveis globais
 int memory_array[MEMORY_SIZE];
 int REGS[NUM_REGISTER];
-int PC = 6;
+int PC = 0;
 int run = 1;
 int decode[5];
 
@@ -36,7 +36,7 @@ void write_memory() {
 
 	FILE *file;
    	int i;
-   	file = fopen ("memory.txt","w");
+   	file = fopen ("memory_out.txt","w");
  	
 	printf("WRITING MEMORY FILE!\n");
    	for(i=0;i<MEMORY_SIZE;i++) {
@@ -121,7 +121,7 @@ void exec(/*int* wire*/) {
 		case 0x15:
 			
 			memory_array[REGS[wire[1]]] = REGS[wire[2]];	//[rd] = rs
-			printf("MEM-mod: %x\n", memory_array[REGS[wire[1]]]);
+			printf("MEM-mod%d: %x\n",REGS[wire[1]], memory_array[REGS[wire[1]]]);
 			break;
 		//LDX
 		case 0x14:
@@ -225,7 +225,7 @@ int main() {
 		printf("REGS:\n0:%x\n1:%x\n2:%x\n3:%x\n4:%x\n5:%x\n6:%x\n7:%x\n", REGS[0], REGS[1], REGS[2], REGS[3], REGS[4], REGS[5], REGS[6], REGS[7]);
 		printf("-----------%d\n",i);
 		i++;
-		if(i == 100) { break;}
+		//if(i == 100) { break;}
 	}
 	write_memory();
 	return 0;
